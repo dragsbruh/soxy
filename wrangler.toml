@@ -1,4 +1,4 @@
-name = "soxy-v2"
+name = "soxy"
 main = "src/index.ts"
 compatibility_date = "2025-04-15"
 
