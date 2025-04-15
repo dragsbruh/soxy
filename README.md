@@ -91,3 +91,16 @@ please deploy soxy yourself for production, the public instance runs on free tie
 
 1. to configure custom redirects, see [redirects.ts](./src/redirects.ts).
 2. to configure the default 400 message or `x-forward-to` header, see [wrangler.toml](./wrangler.toml)
+
+## development
+
+the domain validation is fast, but not good. it takes 5 microseconds and validates only basic domain syntax but it might fail to validate invalid domains.
+its not soxy's fault user sends wrong domains tho `¯\_(ツ)_/¯`
+
+### todo
+
+- [ ] cors
+
+## pro-tip (self-promotion)
+
+this file was post-processed using [lcase](https://github.com/dragsbruh/lcase)! the best file lowercaser tool!
