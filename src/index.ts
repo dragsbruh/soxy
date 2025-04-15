@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 import { validDomain } from "./domain";
 import redirects from "./redirects";
+import { corsHeaders, corsHeadersLite } from "./cors";
 
 type RequestTarget = {
 	origin: string;
@@ -39,7 +40,7 @@ function checkRedirects(request: Request) {
 
 async function hitOrigin(request: Request, target: RequestTarget): Promise<Response> {
 	const requestHeaders = new Headers(request.headers);
-	
+
 	requestHeaders.delete(env.FORWARD_HEADER);
 	requestHeaders.delete("origin");
 	requestHeaders.delete("host");
@@ -59,6 +60,7 @@ async function hitOrigin(request: Request, target: RequestTarget): Promise<Respo
 			headers: {
 				"x-resolved": url.toString(),
 				"x-soxy-error": "error fetching from origin: " + String(e),
+				...corsHeadersLite,
 			}
 		})
 	}
@@ -69,12 +71,22 @@ async function hitOrigin(request: Request, target: RequestTarget): Promise<Respo
 	return new Response(response.body, {
 		status: response.status,
 		statusText: response.statusText,
-		headers,
+		headers: {
+			...headers,
+			...corsHeadersLite,
+		},
 	});
 }
 
 export default {
 	async fetch(request): Promise<Response> {
+		if (request.method === "OPTIONS") {
+			return new Response(null, {
+				status: 204,
+				headers: corsHeaders,
+			})
+		}
+
 		const origin = originOf(request);
 		if (origin) {
 			return hitOrigin(request, origin);
@@ -88,6 +100,7 @@ export default {
 					"location": redirect,
 					"x-soxy-message": "this was a configured redirect ¯\_(ツ)_/¯",
 					"content-length": "0",
+					...corsHeadersLite,
 				}
 			})
 		}
@@ -95,7 +108,8 @@ export default {
 		return new Response(env.HELP_MESSAGE, {
 			status: 400,
 			headers: {
-				"x-soxy-warn": "you did not hit any origin or configured redirect, this is a proxy."
+				"x-soxy-warn": "you did not hit any origin or configured redirect, this is a proxy.",
+				...corsHeadersLite
 			}
 		})
 	},
