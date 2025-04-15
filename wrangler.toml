@@ -1,0 +1,11 @@
+name = "soxy-v2"
+main = "src/index.ts"
+compatibility_date = "2025-04-15"
+
+[observability]
+enabled = true
+
+[vars]
+DOCS = "https://github.com/dragsbruh/soxy"
+FORWARD_HEADER="x-forward-to"
+HELP_MESSAGE = "thats not right, see /docs"
