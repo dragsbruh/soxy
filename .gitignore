@@ -170,3 +170,6 @@ dist
 
 .dev.vars
 .wrangler/
+
+# bun doesnt work for workers auto deploy im assuming :(
+bun.lock

@@ -14,6 +14,8 @@ as i said, soxy works on a cloudflare worker, you can smash this button to deplo
 
 or see [advanced deployment](#advanced-deployment)
 
+_whoops, the deploy button didnt work till now, it should now work tho, hopefully_
+
 ### basic usage
 
 there are two methods of using soxy to proxy:
